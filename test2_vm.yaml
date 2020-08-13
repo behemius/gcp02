@@ -1,9 +1,22 @@
+imports:
+- path: startup-script.sh
+  name: startup-script.sh
+
 resources:
 - name: mariadb
   type: compute.v1.instance
   properties:
    zone: us-west1-a
    machineType: https://www.googleapis.com/compute/v1/projects/behemius/zones/us-west1-a/machineTypes/f1-micro
+   metadata-from-file:
+    startup-script: startup-script.sh
+   metadata:
+    items:
+    {% for key, value in properties['metadata-from-file'].items() %}
+    - key: {{ key }}
+      value: |
+        {{ imports[value]|indent(10) }}
+    {% endfor %}
 
    disks:
    - deviceName: boot
@@ -15,8 +28,15 @@ resources:
 
    networkInterfaces:
    - network: https://www.googleapis.com/compute/v1/projects/behemius/global/networks/default
-#     networkIP: "10.138.0.11"
+     networkIP: "10.138.0.11"
      accessConfigs:
      - name: External NAT
        type: ONE_TO_ONE_NAT
 
+outputs:
+- name: DatabasePublicIP
+  value: $(ref.mariadb.networkInterfaces[0].accessConfigs[0].natIP)
+- name: DatabaseInternalIP
+  value: $(ref.mariadb.networkInterfaces[0].networkIP)
+- name: DatabasePort
+  value: 3306

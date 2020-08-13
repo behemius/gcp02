@@ -37,3 +37,27 @@ Parameters:
 
 Installation MariaDB:
 sudo apt install mariadb-server -y
+
+
+Installation node1 VM (for 'behemius' project)
+----------------------------------------------
+It's modification example clean VM.
+There is used dedicated internal IP (10.138.0.11) and installed MariaDB
+
+Creation: gcloud deployment-manager deployments create mariadb --config gcp02/test2_vm.yaml
+Deletion: gcloud deployment-manager deployments delete mariadb
+
+Installation cluster (for 'behemius' project)
+---------------------------------------------
+
+Google Cloud Shell:
+git clone https://github.com/behemius/gcp02.git
+gcloud config set project behemius
+
+Creation: gcloud deployment-manager deployments create galera --config gcp02/cluster.yaml
+Deletion: gcloud deployment-manager deployments delete galera
+
+Parameters:
+- Default subnet: 10.138.0.0/20
+- IP addresses: 10.138.0.11-13
+

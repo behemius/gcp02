@@ -1,0 +1,84 @@
+resources:
+- name: mariadb1
+  type: compute.v1.instance
+  properties:
+   zone: us-west1-a
+   machineType: https://www.googleapis.com/compute/v1/projects/behemius/zones/us-west1-a/machineTypes/f1-micro
+
+   disks:
+   - deviceName: boot
+     type: PERSISTENT
+     boot: true
+     autoDelete: true
+     initializeParams:
+      sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-10
+
+   networkInterfaces:
+   - network: https://www.googleapis.com/compute/v1/projects/behemius/global/networks/default
+     networkIP: "10.138.0.11"
+     accessConfigs:
+     - name: External NAT
+       type: ONE_TO_ONE_NAT
+
+   metadata:
+    items:
+    - key: startup-script
+      value: |
+        #!/bin/bash
+        apt install mariadb-server -y
+
+- name: mariadb2
+  type: compute.v1.instance
+  properties:
+   zone: us-west1-a
+   machineType: https://www.googleapis.com/compute/v1/projects/behemius/zones/us-west1-a/machineTypes/f1-micro
+
+   disks:
+   - deviceName: boot
+     type: PERSISTENT
+     boot: true
+     autoDelete: true
+     initializeParams:
+      sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-10
+
+   networkInterfaces:
+   - network: https://www.googleapis.com/compute/v1/projects/behemius/global/networks/default
+     networkIP: "10.138.0.12"
+     accessConfigs:
+     - name: External NAT
+       type: ONE_TO_ONE_NAT
+
+   metadata:
+    items:
+    - key: startup-script
+      value: |
+        #!/bin/bash
+        apt install mariadb-server -y
+
+- name: mariadb3
+  type: compute.v1.instance
+  properties:
+   zone: us-west1-a
+   machineType: https://www.googleapis.com/compute/v1/projects/behemius/zones/us-west1-a/machineTypes/f1-micro
+
+   disks:
+   - deviceName: boot
+     type: PERSISTENT
+     boot: true
+     autoDelete: true
+     initializeParams:
+      sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-10
+
+   networkInterfaces:
+   - network: https://www.googleapis.com/compute/v1/projects/behemius/global/networks/default
+     networkIP: "10.138.0.13"
+     accessConfigs:
+     - name: External NAT
+       type: ONE_TO_ONE_NAT
+
+   metadata:
+    items:
+    - key: startup-script
+      value: |
+        #!/bin/bash
+        apt install mariadb-server -y

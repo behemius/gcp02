@@ -15,8 +15,8 @@ resources:
 
    networkInterfaces:
    - network: https://www.googleapis.com/compute/v1/projects/behemius/global/networks/default
-#     networkIP: "10.138.0.11"
      accessConfigs:
      - name: External NAT
        type: ONE_TO_ONE_NAT
+     networkIP: "10.138.0.11"
 
