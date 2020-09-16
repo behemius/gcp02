@@ -20,14 +20,26 @@ Belgium: europe-west1
 
 1 GB network egress from North America to all region destinations (excluding China and Australia) per month
 
-Installation example clean VM (for 'behemius' project)
--------------------------------------------------------
-Google Cloud Shell:
-git clone https://github.com/behemius/gcp02.git
+Preparation
+-----------
+
+Google Cloud Shell: 
+
+git clone https://github.com/behemius/gcp02.git 
+
 gcloud config set project behemius
 
-Creation: gcloud deployment-manager deployments create mariadb --config gcp02/test_vm.yaml
-Deletion: gcloud deployment-manager deployments delete mariadb
+
+Installation example clean VM (for 'behemius' project)
+-------------------------------------------------------
+
+Creation: 
+
+gcloud deployment-manager deployments create mariadb --config gcp02/test_vm.yaml
+
+Deletion: 
+
+gcloud deployment-manager deployments delete mariadb
 
 Parameters:
 - service: Compute v1 instance
@@ -44,18 +56,29 @@ Installation node1 VM (for 'behemius' project)
 It's modification example clean VM.
 There is used dedicated internal IP (10.138.0.11) and installed MariaDB
 
-Creation: gcloud deployment-manager deployments create mariadb --config gcp02/test2_vm.yaml
-Deletion: gcloud deployment-manager deployments delete mariadb
+Creation: 
+
+gcloud deployment-manager deployments create mariadb --config gcp02/test2_vm.yaml
+
+Deletion: 
+
+gcloud deployment-manager deployments delete mariadb
 
 Installation cluster (for 'behemius' project)
 ---------------------------------------------
 
 Google Cloud Shell:
+
 git clone https://github.com/behemius/gcp02.git
 gcloud config set project behemius
 
-Creation: gcloud deployment-manager deployments create galera --config gcp02/cluster.yaml
-Deletion: gcloud deployment-manager deployments delete galera
+Creation: 
+
+gcloud deployment-manager deployments create galera --config gcp02/cluster.yaml
+
+Deletion: 
+
+gcloud deployment-manager deployments delete galera
 
 Parameters:
 - Default subnet: 10.138.0.0/20

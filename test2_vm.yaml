@@ -1,22 +1,9 @@
-imports:
-- path: startup-script.sh
-  name: startup-script.sh
-
 resources:
 - name: mariadb
   type: compute.v1.instance
   properties:
    zone: us-west1-a
    machineType: https://www.googleapis.com/compute/v1/projects/behemius/zones/us-west1-a/machineTypes/f1-micro
-   metadata-from-file:
-    startup-script: startup-script.sh
-   metadata:
-    items:
-    {% for key, value in properties['metadata-from-file'].items() %}
-    - key: {{ key }}
-      value: |
-        {{ imports[value]|indent(10) }}
-    {% endfor %}
 
    disks:
    - deviceName: boot
@@ -32,6 +19,30 @@ resources:
      accessConfigs:
      - name: External NAT
        type: ONE_TO_ONE_NAT
+
+   metadata:
+    items:
+    - key: startup-script
+      value: |
+        #!/bin/bash
+        apt-get update
+        apt install mariadb-server -y
+        sed -i '/bind/s/^/#/' /etc/mysql/mariadb.conf.d/50-server.cnf
+        echo "
+        [galera]
+        wsrep_on=ON
+        wsrep_provider=/usr/lib/galera/libgalera_smm.so
+        wsrep_cluster_address='gcomm://'
+        binlog_format=row
+        default_storage_engine=InnoDB
+        innodb_autoinc_lock_mode=2
+        bind-address=0.0.0.0
+        wsrep_cluster_name='galera_cluster'
+        wsrep_node_address='mariadb1'" >> /etc/mysql/mariadb.conf.d/50-server.cnf
+        galera_new_cluster
+        systemctl restart mariadb
+        sed 's/gcomm:\/\//gcomm:\/\/mariadb1,mariadb2,mariadb3/' /etc/mysql/mariadb.conf.d/50-server.cnf
+
 
 outputs:
 - name: DatabasePublicIP
